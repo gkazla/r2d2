@@ -7,9 +7,9 @@ from r2d2.api.websocket.websocket_stack import WebSocketStack
 class ApiStack(Stack):
     def __init__(self, scope: Stack) -> None:
         """
-        API Gateway stack.
+        CloudFormation stack for API resources.
 
-        :param scope: Main R2D2 domain stack.
+        :param scope: Stack in which resources should be created.
 
         :return: No return.
         """

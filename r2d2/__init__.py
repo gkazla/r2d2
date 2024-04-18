@@ -16,11 +16,13 @@ class GlobLayers:
 
 
 class GlobTables:
-    r2d2_session_table: None = None
+    from r2d2.db.r2d2_session_table import R2D2SessionTable
+
+    r2d2_session_table: R2D2SessionTable | None = None
 
 
 class GlobQueues:
-    chatbot_sqs_fifo_queue: IQueue = None
+    chatbot_sqs_fifo_queue: IQueue | None = None
 
 
 class GlobApi:

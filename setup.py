@@ -16,15 +16,14 @@ setup(
     long_description_content_type='text/markdown',
     include_package_data=True,
     install_requires=[
+        'setuptools',
+        'boto3>=1.15.0,<2.0.0',
         'b-cfn-api-v2>=5.0.0,<6.0.0',
         'b-cfn-lambda-layer>=3.0.0,<4.0.0',
         'b-lambda-layer-common>=4.0.0,<5.0.0',
-        'b-dynamodb-common>=0.4.1,<1.0.0',
         'pydantic==1.10.0a1',
         'pynamodb==5.5.1',
         'openai==1.20.0',
-        'boto3>=1.15.0,<2.0.0',
-        'setuptools',
 
         # --------------------------------------
         # AWS CDK dependencies.

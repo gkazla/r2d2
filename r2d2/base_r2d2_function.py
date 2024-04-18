@@ -1,12 +1,11 @@
-import os
 from abc import ABC
 from typing import Any, cast
 
 from aws_cdk.aws_iam import PolicyStatement
 from aws_cdk.aws_lambda import Runtime
-from utils.base_function import BaseFunction
 
 from r2d2 import GlobLayers, GlobTables
+from utils.base_function import BaseFunction
 
 
 class BaseR2D2Function(BaseFunction, ABC):
@@ -18,7 +17,6 @@ class BaseR2D2Function(BaseFunction, ABC):
     @staticmethod
     def environment() -> dict[str, Any]:
         return {
-            'OPENAI_API_KEY': os.environ['OPENAI_API_KEY'],
             'R2D2_SESSION_TABLE_NAME': GlobTables.r2d2_session_table.table_name,
             'R2D2_SESSION_TABLE_REGION': GlobTables.r2d2_session_table.region,
         }
@@ -33,6 +31,8 @@ class BaseR2D2Function(BaseFunction, ABC):
                 actions=[
                     'dynamodb:GetItem',
                 ],
-                resources=[],
+                resources=[
+                    GlobTables.r2d2_session_table.table_arn,
+                ],
             )
         ]

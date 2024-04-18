@@ -2,6 +2,7 @@ from aws_cdk import Stack
 from aws_cdk.aws_apigatewayv2 import CfnDeployment
 
 from r2d2 import GlobDomain, GlobApi
+from r2d2.api.websocket.routes.custom_routes.chatbot.chatbot_routes_stack import ChatbotRoutesStack
 
 
 class CustomWsRoutesStack(Stack):
@@ -11,14 +12,18 @@ class CustomWsRoutesStack(Stack):
         super().__init__(scope=scope, id=stack_name, stack_name=stack_name)
 
         # -----------------------------------------------
-        # Mi Assistant Endpoints Stack.
+        # Chatbot Routes Stack.
         # -----------------------------------------------
+
+        chatbot_routes_stack = ChatbotRoutesStack(scope=self)
 
         # -----------------------------------------------
         # Routes.
         # -----------------------------------------------
 
-        self.routes = []
+        self.routes = [
+            *chatbot_routes_stack.routes,
+        ]
 
         # -----------------------------------------------
         # Deployment.

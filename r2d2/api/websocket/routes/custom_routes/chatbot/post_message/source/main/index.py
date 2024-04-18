@@ -2,9 +2,15 @@ import json
 import logging
 from typing import Any
 
+import boto3
 from b_lambda_layer_common.util.logging import LoggingManager
+from b_lambda_layer_common.util.os_parameter import OSParameter
 
-from r2d2_layer.models.session.session_model import Session, SessionStatus
+from r2d2_layer.models.sqs_message.chatbot_sqs_message_model import ChatbotSqsMessage
+from r2d2_layer.util.chatbot_exception import ChatbotException
+
+CHATBOT_SQS_FIFO_QUEUE_URL = OSParameter('CHATBOT_SQS_FIFO_QUEUE_URL')
+SQS_CLIENT = boto3.client('sqs')
 
 LoggingManager().setup_logging()
 logger = logging.getLogger(__name__)
@@ -12,7 +18,9 @@ logger = logging.getLogger(__name__)
 
 def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     """
-    Logs a Websocket connect event.
+    R2D2 Chatbot Post Message Lambda function.
+
+    Sends the message to the Chatbot SQS FIFO queue for further processing.
 
     :param event: Lambda event.
     :param context: Lambda context.
@@ -26,23 +34,23 @@ def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     # ---------------------------------------------
 
     try:
-        connection_id = event['requestContext']['connectionId']
-    except KeyError as ex:
-        logger.error(f'Unexpected error while parsing request: {repr(ex)}.')
-        raise
+        chatbot_sqs_message = ChatbotSqsMessage.parse_ws_event(event)
+    except ChatbotException as ex:
+        logger.error(repr(ex))
+        return {'statusCode': 200}
 
     # ---------------------------------------------
     # Actions.
     # ---------------------------------------------
 
-    sessions = Session.query_connection_active_sessions(connection_id=connection_id)
-    for session in sessions:
-        session.update_session(session_status=SessionStatus.CLOSED)
+    SQS_CLIENT.send_message(
+        QueueUrl=CHATBOT_SQS_FIFO_QUEUE_URL.value,
+        MessageBody=chatbot_sqs_message.json(),
+        MessageGroupId=chatbot_sqs_message.group_id
+    )
 
     # ---------------------------------------------
     # Outputs.
     # ---------------------------------------------
-
-    logger.info(f'Websocket connection was closed. Connection id: {connection_id}')
 
     return {'statusCode': 200}

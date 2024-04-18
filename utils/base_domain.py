@@ -18,7 +18,7 @@ class BaseDomain:
             id=self.build_stack_name(self._MAIN_STACK_NAME),
             stack_name=self.build_stack_name(self._MAIN_STACK_NAME),
             env=Environment(
-                account=os.environ.get('ACCOUNT') or boto3.client('sts').get_caller_identity()['Account'],
+                account=boto3.client('sts').get_caller_identity()['Account'],
                 region=os.environ.get('AWS_REGION')
             )
         )

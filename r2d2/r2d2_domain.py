@@ -1,7 +1,10 @@
 from aws_cdk import App, Stack
 
 from r2d2 import GlobDomain, GlobLayers
+from r2d2.api.api_stack import ApiStack
 from r2d2.db.database_stack import DatabaseStack
+from r2d2.functions.functions_stack import FunctionsStack
+from r2d2.queue.queue_stack import QueueStack
 from r2d2_layer.r2d2_layer import R2D2Layer
 from utils.base_domain import BaseDomain
 
@@ -29,3 +32,6 @@ class R2D2Domain(BaseDomain):
         # -----------------------------------------------
 
         self.database_stack = DatabaseStack(scope=self.main_stack)
+        self.queue_stack = QueueStack(scope=self.main_stack)
+        self.api_stack = ApiStack(scope=self.main_stack)
+        self.functions_stack = FunctionsStack(scope=self.main_stack)

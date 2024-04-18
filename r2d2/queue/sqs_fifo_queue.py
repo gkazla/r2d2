@@ -7,24 +7,25 @@ class SqsFifoQueue(Queue):
             self,
             scope: Stack,
             queue_name: str,
-            content_based_deduplication: bool = False,
+            content_based_deduplication: bool = True,
             receive_message_wait_time: Duration = Duration.seconds(20),
             message_visibility_timeout: Duration = Duration.seconds(60),
             message_retention_period: Duration = Duration.minutes(1)
     ) -> None:
         """
-        Provision SQS FIFO queue.
+        SQS FIFO queue resource.
 
-        :param scope: Main R2D2 domain stack.
+        :param scope: Main domain stack.
         :param queue_name: Name of the queue.
         :param content_based_deduplication: Specifies whether to enable content-based deduplication.
             During the deduplication interval (5 minutes), Amazon SQS treats messages that are sent with
             identical content (excluding attributes) as duplicates and delivers only one copy of the message.
-            Default: false
+            Default: true
         :param receive_message_wait_time: Wait time for ReceiveMessage calls. Default is max value
             of 20 seconds for long polling of the messages.
         :param message_visibility_timeout: Timeout of processing a single message. Default: Duration.seconds(60) if not set.
-        :param message_retention_period: The time that Amazon SQS retains a message. Default: Duration.minutes(1) if not set.
+        :param message_retention_period: The time that Amazon SQS retains a message in the queue.
+            Default: Duration.minutes(1) if not set.
 
         :return: No return.
         """

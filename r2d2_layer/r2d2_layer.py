@@ -9,7 +9,6 @@ from b_cfn_lambda_layer.package_version import PackageVersion
 
 class R2D2Layer(LambdaLayer):
     SOURCE_PATH = os.path.dirname(__file__)
-
     COMPATIBLE_RUNTIMES: list[Runtime] = [
         Runtime.PYTHON_3_8,
         Runtime.PYTHON_3_9,
@@ -17,10 +16,8 @@ class R2D2Layer(LambdaLayer):
         Runtime.PYTHON_3_11,
         Runtime.PYTHON_3_12,
     ]
-
     DEPENDENCIES = [
         'b-lambda-layer-common',
-        'b-dynamodb-common',
         'openai',
         'pydantic',
         'pynamodb',

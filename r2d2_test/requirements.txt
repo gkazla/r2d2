@@ -1,5 +1,4 @@
 pytest
 requests
-faker>=19.2.0,<20.0.0
 b-aws-testing-framework>=1.0.0,<2.0.0
 b-aws-cdk-parallel>=3.0.0,<4.0.0
