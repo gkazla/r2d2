@@ -27,8 +27,16 @@ class WebSocketStack(Stack):
         )
         self.websocket_api.enable_default_stage(stage_name='dev')
 
+        url = (
+            f'{self.websocket_api.ref}.execute-api.{scope.region}.amazonaws.com/'
+            f'{self.websocket_api.default_stage.ref}/'
+        )
+        self.websocket_url = f'wss://{url}'
+        self.connection_url = f'https://{url}'
+
         GlobApi.websocket = self.websocket_api
         GlobApi.websocket_stage = self.websocket_api.default_stage
+        GlobApi.websocket_connection_url = self.connection_url
 
         # -----------------------------------------------
         # Stacks.

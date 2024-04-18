@@ -9,8 +9,5 @@ class BaseChatbotBackend(BaseR2D2WsBackend, ABC):
     def environment(self) -> dict[str, Any]:
         return {
             **super().environment(),
-            'CONNECTIONS_URL': (
-                f'https://{GlobApi.websocket.ref}.execute-api.{self.scope.region}.amazonaws.com/'
-                f'{GlobApi.websocket_stage.ref}'
-            ),
+            'CONNECTIONS_URL': GlobApi.websocket_connection_url
         }

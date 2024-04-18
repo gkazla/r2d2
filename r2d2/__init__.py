@@ -28,3 +28,4 @@ class GlobQueues:
 class GlobApi:
     websocket: Api | None = None
     websocket_stage: CfnStage | None = None
+    websocket_connection_url: str | None = None

@@ -19,7 +19,7 @@ class BaseDomain:
             stack_name=self.build_stack_name(self._MAIN_STACK_NAME),
             env=Environment(
                 account=boto3.client('sts').get_caller_identity()['Account'],
-                region=os.environ.get('AWS_REGION')
+                region=os.environ.get('AWS_DEFAULT_REGION')
             )
         )
 
