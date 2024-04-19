@@ -2,7 +2,7 @@ import logging
 
 from b_lambda_layer_common.exceptions.container.not_found_error import NotFoundError
 
-from r2d2_layer.models.session.session_model import Session
+from r2d2_layer.models.session.session_model import Session, SessionStatus
 from r2d2_layer.models.sqs_message.chatbot_sqs_message_model import ChatbotSqsMessage
 from r2d2_layer.util.websocket_response import WebsocketResponse
 from .utils.chat_completion import ChatCompletion, Message, MessageRole
@@ -54,16 +54,38 @@ class Execute:
         WebsocketResponse.PROCESSING_END.send(connection_id=self._chatbot_sqs_message.connection_id)
 
     def _get_session(self) -> Session | None:
+        """
+        Get the session from the database.
+
+        :return: The session if found and open, otherwise None.
+        """
+
+        def send_error_message(error_message: str) -> None:
+            """
+            Send an error message to the client.
+
+            :param error_message: The error message to send.
+
+            :return: No return.
+            """
+            logger.warning(error_message)
+            WebsocketResponse.ERROR.send(
+                connection_id=self._chatbot_sqs_message.connection_id,
+                response_data=error_message
+            )
+
         try:
-            return Session.get_session(
+            session = Session.get_session(
                 connection_id=self._chatbot_sqs_message.connection_id,
                 session_id=self._chatbot_sqs_message.session_id,
                 consistent_read=True
             )
-        except NotFoundError as ex:
-            logger.warning(repr(ex))
-            WebsocketResponse.ERROR.send(
-                connection_id=self._chatbot_sqs_message.connection_id,
-                response_data=ex.message()
-            )
+        except NotFoundError:
+            send_error_message('The session is not found. Please start a new session.')
             return
+
+        if session.status == SessionStatus.CLOSED.value:
+            send_error_message('The session is closed. Please start a new session.')
+            return
+
+        return session

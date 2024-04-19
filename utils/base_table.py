@@ -16,13 +16,13 @@ class BaseTable(Table, ABC):
             removal_policy: RemovalPolicy = RemovalPolicy.DESTROY,
             billing_mode: BillingMode = BillingMode.PAY_PER_REQUEST,
     ) -> None:
-        self.__scope = scope
-        self.__table_name = table_name
+        self._scope = scope
+        self._table_name = table_name
 
         super().__init__(
             scope=scope,
-            id=self.__table_name,
-            table_name=self.__table_name,
+            id=self._table_name,
+            table_name=self._table_name,
             partition_key=partition_key,
             removal_policy=removal_policy,
             point_in_time_recovery=True,
@@ -41,7 +41,7 @@ class BaseTable(Table, ABC):
 
         :return: Table name.
         """
-        return self.__table_name
+        return self._table_name
 
     @property
     def table_arn(self) -> str:
@@ -52,8 +52,8 @@ class BaseTable(Table, ABC):
 
         :return: Table ARN.
         """
-        return f'arn:aws:dynamodb:{self.__scope.region}:{self.__scope.account}:table/{self.__table_name}'
+        return f'arn:aws:dynamodb:{self._scope.region}:{self._scope.account}:table/{self._table_name}'
 
     @property
     def region(self) -> str:
-        return self.__scope.region
+        return self._scope.region

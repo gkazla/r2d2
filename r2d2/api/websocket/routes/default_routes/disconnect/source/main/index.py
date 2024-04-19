@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     """
-    Logs a Websocket connect event.
+    Logs a Websocket disconnect event.
 
     :param event: Lambda event.
     :param context: Lambda context.

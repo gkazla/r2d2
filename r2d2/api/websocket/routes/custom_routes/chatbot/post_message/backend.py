@@ -3,7 +3,7 @@ from typing import Any
 from aws_cdk.aws_iam import PolicyStatement, Effect
 from aws_cdk.aws_lambda import Code
 
-from r2d2 import GlobDomain, GlobQueues, GlobTables
+from r2d2 import GlobDomain, GlobQueues
 from r2d2.api.websocket.routes.custom_routes.chatbot.base_chatbot_backend import BaseChatbotBackend
 
 
@@ -21,11 +21,6 @@ class ChatbotPostMessageWsFunction(BaseChatbotBackend):
                 effect=Effect.ALLOW,
                 actions=['sqs:SendMessage'],
                 resources=[GlobQueues.chatbot_sqs_fifo_queue.queue_arn]
-            ),
-            PolicyStatement(
-                effect=Effect.ALLOW,
-                actions=['dynamodb:UpdateItem'],
-                resources=[GlobTables.r2d2_session_table.table_arn]
             )
         ]
 

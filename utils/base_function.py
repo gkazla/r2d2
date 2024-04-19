@@ -30,8 +30,6 @@ class BaseFunction(Function, ABC):
         for statement in self.policy_statements():
             self.add_to_role_policy(statement)
 
-        self.__public_endpoint: None = None
-
     @abstractmethod
     def name(self) -> str:
         raise NotImplementedError()

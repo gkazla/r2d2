@@ -93,7 +93,7 @@ class Session(Model):
         Creates a new session.
 
         :param connection_id: WebSocket Connection ID to create the session for.
-        :param gpt_model: GPT model for the R2D@ Chatbot session to use.
+        :param gpt_model: GPT model for the R2D2 Chatbot session to use. Defaults to 'gpt-3.5-turbo'.
 
         :return: Session model instance.
         """
