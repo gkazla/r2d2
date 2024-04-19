@@ -116,7 +116,7 @@ Request message:
 - `action` - indicates WebSocket route.
 - `session_id` - indicates chatbot session ID.
 - `system_message` - indicates system message. Optional parameter.
-- `message` - indicates user message.
+- `user_message` - indicates user message.
 
 Response messages:
 
